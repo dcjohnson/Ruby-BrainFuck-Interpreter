@@ -17,7 +17,7 @@ def Main()
 			brainfuckString = fileReader.ReadFile
 			interpreter = Interpreter::BrainFuckInterpreter.new()
 			interpreter.ProcessTokens(brainfuckString) do |output|
-				puts output
+				print output
 			end
 		elsif ARGV[0] == "-i"
 			puts Usage()

@@ -15,8 +15,8 @@ def Main()
 		if ARGV[0] == "-t"
 			fileReader = Input::TextSourceFile.new(ARGV[1])
 			brainfuckString = fileReader.ReadFile
-			interpreter = Interpreter::BrainFuckInterpreter.new()
-			interpreter.ProcessTokens(brainfuckString) do |output|
+			interpreter = Interpreter::BrainFuckInterpreter.new(brainfuckString)
+			interpreter.ProcessTokens() do |output|
 				print output
 			end
 		elsif ARGV[0] == "-i"

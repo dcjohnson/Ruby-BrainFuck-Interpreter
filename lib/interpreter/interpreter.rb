@@ -1,15 +1,24 @@
 module Interpreter
 	class BrainFuckInterpreter
-		def initialize()
+		def initialize(brainFuckString)
 			@byteArray = [0]
+			@rightBracketStack = []
 			@pointer = 0
 			@instructionPointer = 0
-			@rightBracketStack = []
+			@brainFuckString = brainFuckString
 		end
 
-		def ProcessTokens(brainFuckString)
-			while true
-				case brainFuckString[@instructionPointer]
+		def SetConstants()
+			@byteArray = [0]
+			@rightBracketStack = []
+			@pointer = 0
+			@instructionPointer = 0
+		end
+
+		def ProcessTokens()
+			SetConstants()
+			loop do
+				case @brainFuckString[@instructionPointer]
 				when '>'
 					IncrementPointer()
 				when '<'
@@ -29,12 +38,14 @@ module Interpreter
 				else
 					raise TypeError
 				end
-				if @instructionPointer == brainFuckString.length - 1
+				if @instructionPointer == @brainFuckString.length - 1
 					break
 				end
 				@instructionPointer += 1
 			end
 		end
+
+		private
 
 		def IncrementPointer()
 			if @pointer == @byteArray.length - 1
@@ -69,22 +80,21 @@ module Interpreter
 			@byteArray[@pointer] = input.ord
 		end
 
-		def MoveToLeftFacingBracket()
+		def GetLeftFacingBracket()
 			tempPointer = @instructionPointer
-			while tempByte = @byteArray[tempPointer]
-				if tempByte.chr != ']'
+			while tempByte = @brainFuckString[tempPointer]
+				if tempByte != ']'
 					tempPointer += 1
 					next
 				end
 				break
 			end
-			@instructionPointer = tempPointer
-			@instructionPointer += 1
+			return tempPointer
 		end
 
 		def ProcessRightBracket()
 			if @byteArray[@pointer] == 0
-				MoveToLeftFacingBracket()
+				@instructionPointer = GetLeftFacingBracket()
 			else
 				@rightBracketStack << @instructionPointer
 			end

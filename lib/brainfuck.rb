@@ -19,8 +19,6 @@ def Main()
 			interpreter.ProcessTokens() do |output|
 				print output
 			end
-		elsif ARGV[0] == "-i"
-			puts Usage()
 		else
 			puts Usage()
 		end

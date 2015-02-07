@@ -35,8 +35,6 @@ module Interpreter
 					ProcessRightBracket()
 				when ']'
 					ProcessLeftBracket()
-				else
-					raise TypeError
 				end
 				if @instructionPointer == @brainFuckString.length - 1
 					break
@@ -55,6 +53,7 @@ module Interpreter
 		end
 
 		def DecrementPointer()
+
 			if @pointer == 0
 				raise IndexError
 			else
@@ -81,13 +80,20 @@ module Interpreter
 		end
 
 		def GetLeftFacingBracket()
-			tempPointer = @instructionPointer
-			while tempByte = @brainFuckString[tempPointer]
-				if tempByte != ']'
-					tempPointer += 1
-					next
+			tempPointer = @instructionPointer + 1
+			leftBracketCount = 0
+			loop do
+				if @brainFuckString[tempPointer] == '['
+					leftBracketCount += 1
+				elsif leftBracketCount > 0
+					if @brainFuckString[tempPointer] == ']'
+						leftBracketCount -= 1
+					end
 				end
-				break
+				tempPointer += 1
+				if leftBracketCount == 0 && @brainFuckString[tempPointer] == ']'
+					break
+				end
 			end
 			return tempPointer
 		end
@@ -101,10 +107,10 @@ module Interpreter
 		end
 
 		def ProcessLeftBracket()
-			if @byteArray[@pointer] != 0
-				@instructionPointer = @rightBracketStack.last
-			else
+			if @byteArray[@pointer] == 0
 				@rightBracketStack.pop
+			else
+				@instructionPointer = @rightBracketStack.last
 			end
 		end
 	end
